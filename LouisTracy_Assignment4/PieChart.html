@@ -1,0 +1,155 @@
+<!-- 
+    this program will take two sets of data and create two seperate pie charts with the sections having their labels next to them.
+-->
+<!doctype html>
+<html>
+<script> 
+// this will create the first data set
+const results = [
+    {name: "Satisfied", count: 927, color: "lightblue"},
+    {name: "Neutral", count: 463, color: "lightgreen"},
+    {name: "Unsatisfied", count: 213, color: "pink" },
+    {name: "No Comment", count: 510, color: "silver"}
+];
+// this will create the second data set
+const results_2 = [
+    {name: "Very Happy", count: 104, color: "blue"},
+    {name: "Happy", count: 63, color: "green"},
+    {name: "Neutral", count: 87, color: "red" },
+    {name: "Unhappy", count: 51, color: "yellow"},
+    {name: "Very Unhappy", count: 26, color: "orange"},
+    {name: "No Comment", count: 18, color: "brown"}
+];
+
+
+</script>
+<!--
+    this will create a canvas that has a width and height of 1000 pixels
+-->
+<canvas width = "1000" height = "1000"> </canvas>
+<script>
+// creates a variable what will flag cnvas giving us access to methods and will allow us to make 2d drawings
+let cx = document.querySelector("canvas").getContext("2d");
+//use the array reduce method to get the total of the first data set
+let total = results.reduce((sum,{count}) => sum + count, 0 );
+// this sets the starting angle and will become the new starting angle when drawing every set
+let currentAngle = -0.5 * Math.PI;
+//this is a variable that will be the x-value of where we begin drawing
+let w_x = 600/3;
+//this is a variable that will be the y-variable of where we start drawing
+let h_y = 800/4;
+// creates a for of loop that has a varibale and will draw a paie chart using every set of the first data set
+for(let result of results){
+    // this will create the ending angle for each data set using the ration of the count by total and multiplying it by 2pi
+    let sliceAngle = (result.count / total) * 2 * Math.PI;
+    // will begin drawing on canvas
+    cx.beginPath();
+    // creates an arc centered at the width and height with a radius of 100 and the staring angle being current angle
+    // and the ending angle being the ending angle pluse starting angle
+    cx.arc(w_x, h_y, 100, currentAngle, sliceAngle + currentAngle);
+    //this will move a line to the designated coordinates
+    cx.lineTo(w_x, h_y);
+    // each slice will be filled with the designated color inside the data set
+    cx.fillStyle = result.color;
+    //
+    cx.fill();
+    //
+    cx.stroke();
+    //this wil stop drawing
+    cx.closePath();
+
+    // this will begin drawing
+    cx.beginPath();
+    // creates a new arc
+    cx.arc(w_x, h_y, 100, currentAngle, sliceAngle + currentAngle);
+    //set our font and the pixels the text will take
+    cx.font = "15px Georgia";
+    //this will designate a style 
+    cx.fillStyle = "fuchsia";
+
+    // sets theta to the starting angle adding a small amount and multiplying is by the ending angle
+    let theta = currentAngle + 0.5 * sliceAngle;
+    // will set where on the y-axis the text will be
+    let d_y = Math.sin(theta) * 120 + h_y;
+    // will set where on the x-axis the text will be
+    let d_x = Math.cos(theta) * 120 + w_x;
+    //positions the text in the middle
+    cx.textBaseLine = "middle";
+    //if the angle is less than zero the align will be moved left
+    if(Math.cos(theta) > 0){
+        cx.textAlign = "left";
+    }
+    //else it will be aligned right
+    else{
+        cx.textAlign = "right";
+    }
+    // text will be written using the name of the set at the x and y position
+    cx.fillText(result.name, d_x , d_y);
+    //canvas will stop drawing
+    cx.closePath;
+    //the ending angle will be added to the starting angle
+    currentAngle += sliceAngle;
+    
+}
+
+</script>
+
+<script>
+
+    // will use the reduce method for the second data set to calculate the total
+    let total_2 = results_2.reduce((sum,{count}) => sum + count, 0 );
+    //the starting angle for the second pie chart
+    let currentAngle_2 = 0;
+    //sets the x-axis for the center
+    let w_x_2 = 600;
+    //sets the y-axis for the center
+    let h_y_2= 800/4;
+    // creates a for of loop using the second data set
+    for(let result_2 of results_2){
+        //end angle of the second sets
+        let sliceAngle_2 = (result_2.count / total_2) *2*Math.PI;
+        //canvas begins drawing
+        cx.beginPath();
+        // arc for the second pie chart
+        cx.arc(w_x_2, h_y_2, 100, currentAngle_2, sliceAngle_2 + currentAngle_2);
+        //draws a line to the center of the arc
+        cx.lineTo(w_x_2, h_y_2);
+        // will fill each section with designated color inside each set
+        cx.fillStyle = result_2.color;
+        //
+        cx.fill();
+        //
+        cx.stroke();
+        // canvas will stop drawing
+        cx.closePath();
+    
+        // canvas will begin drawing
+        cx.beginPath();
+        // another arc will be created
+        cx.arc(w_x_2, h_y_2, 100, currentAngle_2, sliceAngle_2 + currentAngle_2);
+        // the font and pixels will be designated
+        cx.font = "15px Georgia";
+        //the style of the text
+        cx.fillStyle = "fuchsia";
+        
+        // the angle used to find a good location where to put the text
+        let theta = currentAngle_2 + .60 * sliceAngle_2;
+        //the y-axis for the text
+        let d_y_2 = Math.sin(theta) * 150 + h_y_2;
+        //the x-axis for the text
+        let d_x_2 = Math.cos(theta) * 150 + w_x_2;
+        //where the text will be positioned in the y-axis
+        cx.textAlign = "center";
+        //where the text will be positioned on the x-axis
+        cx.textBaseline = "middle"
+        //what text will be written and where will it be written
+        cx.fillText(result_2.name, d_x_2 , d_y_2);
+        //canvas will stop drawing
+        cx.closePath;
+        //will add the ending angle to the starting angle
+        currentAngle_2 += sliceAngle_2;
+        
+    } 
+    </script>
+
+</html>

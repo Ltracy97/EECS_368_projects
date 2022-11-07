@@ -1,0 +1,75 @@
+
+<!-- indicates this is an html file-->
+<doctype html>
+<!--
+  creates tab panel for the sections that will be outlined within the scope
+ -->
+
+<tab-panel> 
+  <!--
+    creates a series of div tags that will divide each of the following Rock, Chalk, Jayhawk
+  each will contain Rock ..., Rock Chalk ..., Rock Chalk Jayhawk - Go KU!
+  -->
+    <div data-tabname="Rock">Rock ...</div> 
+    <div data-tabname="Chalk">Rock Chalk ...</div> 
+    <div data-tabname="Jayhawk">Rock Chalk Jayhawk - Go KU!</div> 
+</tab-panel> 
+<!--
+will allow Javascript code to be ran in HTML
+-->
+<script> 
+// creates a function called asTabs that takes a node
+function asTabs(node) {
+  
+  //defines a variable named tab that store an array from the children of node
+   
+  var t = Array.from(node.children).map( (node) => {
+   
+  //node will produce a variable named tab that will store an empty node of type tab
+   
+    var tab = document.createElement("tab");
+    
+  //the textContent of the tab variable will store the text in any attributes of data-tabname
+   
+    tab.textContent = node.getAttribute("data-tabname");
+    
+  //a new variable called tabs is created that will store the data of node and tab
+   
+    var tabs = {node, tab};
+    
+  //button will then have an eventlistened that will have click and a function called selectT with the variable tabs as an input
+  
+    tab.addEventListener("click", () => selectT(tabs));
+    
+  //the tabs variable will be returned 
+  
+    return tabs;
+  });
+  // a variable named tabl will store an empty node of the div type
+  var tabl = document.createElement("div");
+  // for every element in button in the t variable and will make the element the last child of tab
+  for(var {tab} of t) tabl.appendChild(tab);
+  //the child of node will be inserted before the first child
+  node.insertBefore(tabl, node.firstChild);
+  // defines a selectT function with an input of a variable
+  function selectT(selected_t){
+    // for all the tabs in t a variable named selected that stores data in tabs that are equal to selected_t then will display the tabs
+    for(var tabs of t){
+      // tabs will create a selected variable that stores tabs equal to selected_t
+      var selected = tabs == selected_t;
+      // this will display tabs in a in not special style
+      tabs.node.style.display = selected ? "" : "none";
+      //the selected tab will be in red color but the unselected will be in blue
+        tabs.tab.style.color = selected ? "red" : "blue";
+      }
+    }
+    //calls selectT using t variable starting with the information at index zero
+    selectT(t[0]);
+
+    }
+    //runs the asTabs function with "tab-panel" inside document.querySelector as an input 
+asTabs(document.querySelector("tab-panel")); 
+//end of the JavaScript code
+</script> 
+<!--ends html code-->
+</html>
